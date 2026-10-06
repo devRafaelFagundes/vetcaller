@@ -9,6 +9,8 @@ import com.vetcaller.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CreateUserService {
 
@@ -21,12 +23,18 @@ public class CreateUserService {
     }
 
     public UserResponse create(UserRequest request) {
+        Optional<User> userOption = userRepository.findByEmail(request.getEmail());
+
+        if (userOption.isPresent()) {
+            throw new IllegalArgumentException("User with email " + request.getEmail() + " already exists");
+        }
+
         User user = UserMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setActive(true);
 
         request.getPermissions()
-                .forEach(name -> user.addPermission(Permission.builder().name(name).build()));
+                .forEach(name -> user.addPermission(Permission.builder().name(name.toString()).build()));
 
         userRepository.save(user);
 

@@ -1,5 +1,6 @@
 package com.vetcaller.controller.user.dto.request;
 
+import com.vetcaller.domain.enums.Permissions;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,5 +26,5 @@ public class UserRequest {
 
     @NotNull
     @NotEmpty
-    private List<String> permissions;
+    private List<Permissions> permissions;
 }

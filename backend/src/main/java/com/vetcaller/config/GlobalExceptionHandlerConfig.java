@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +20,19 @@ import java.util.Map;
 public class GlobalExceptionHandlerConfig {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage).toList();
-        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<Map<String, String>> errors = new ArrayList<>();
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+            Map<String, String> error = new LinkedHashMap<>();
+            error.put(fieldError.getField(), fieldError.getDefaultMessage());
+            errors.add(error);
+        }
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("status", HttpStatus.FORBIDDEN.value());
+        response.put("errors", errors);
+        response.put("timestamp", LocalDateTime.now());
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -30,9 +41,4 @@ public class GlobalExceptionHandlerConfig {
         return e.getMessage();
     }
 
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
-    }
 }
