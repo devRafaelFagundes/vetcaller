@@ -23,6 +23,7 @@ public class GlobalExceptionHandlerConfig {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException ex) {
         List<Map<String, String>> errors = new ArrayList<>();
+
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             Map<String, String> error = new LinkedHashMap<>();
             error.put(fieldError.getField(), fieldError.getDefaultMessage());
@@ -30,10 +31,11 @@ public class GlobalExceptionHandlerConfig {
         }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("status", HttpStatus.FORBIDDEN.value());
+
+        response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("errors", errors);
         response.put("timestamp", LocalDateTime.now());
-        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
@@ -48,8 +50,7 @@ public class GlobalExceptionHandlerConfig {
         response.put("status", e.getStatus().value());
         response.put("message", e.getMessage());
         response.put("timestamp", LocalDateTime.now());
-
-        return new ResponseEntity<>(response, new HttpHeaders(), e.getStatus());
+        return ResponseEntity.status(e.getStatus()).body(response);
     }
 
 }
