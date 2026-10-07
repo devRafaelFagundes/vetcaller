@@ -30,4 +30,9 @@ public class PetController {
         Pet createdPet = petService.createPet(request);
         return PetMapper.toCreatePetResponse(createdPet);
     }
+
+    @DeleteMapping("/{id}")
+    public void deletePet(@PathVariable Long id) {
+        petService.deletePet(id);
+    }
 }
