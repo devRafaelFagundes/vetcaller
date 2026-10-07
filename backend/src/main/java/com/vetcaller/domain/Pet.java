@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +25,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Pet {
 
     @Id
@@ -42,4 +44,7 @@ public class Pet {
 
     @OneToMany(mappedBy = "pet")
     private List<Appointment> appointments = new ArrayList<>();
+
+    public Pet(String name, int age, Long aLong) {
+    }
 }

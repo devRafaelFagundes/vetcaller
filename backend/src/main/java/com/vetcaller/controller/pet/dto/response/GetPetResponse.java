@@ -1,4 +1,4 @@
-package com.vetcaller.controller.user.dto.response;
+package com.vetcaller.controller.pet.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,17 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class UserResponse {
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class GetPetResponse {
     private Long id;
     private String name;
-    private String email;
-    private List<String> permissions;
+    private Integer age;
+    private Long ownerId;
 }

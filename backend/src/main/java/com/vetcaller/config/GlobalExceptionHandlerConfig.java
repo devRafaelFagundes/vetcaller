@@ -1,5 +1,6 @@
 package com.vetcaller.config;
 
+import com.vetcaller.exceptions.ApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,16 @@ public class GlobalExceptionHandlerConfig {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBadCredentialsException(BadCredentialsException e) {
         return e.getMessage();
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Map<String, Object>> handleApiException(ApiException e) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("status", e.getStatus().value());
+        response.put("message", e.getMessage());
+        response.put("timestamp", LocalDateTime.now());
+
+        return new ResponseEntity<>(response, new HttpHeaders(), e.getStatus());
     }
 
 }
