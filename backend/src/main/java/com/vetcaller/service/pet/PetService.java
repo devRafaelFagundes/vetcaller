@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -36,7 +38,6 @@ public class PetService {
         }
 
         Pet newPet = new Pet();
-        newPet.setAge(request.age());
         newPet.setName(request.name());
         newPet.setOwner(userRepository.getReferenceById(request.ownerId()));
 
@@ -51,5 +52,20 @@ public class PetService {
         }
 
         petRepository.delete(pet);
+    }
+
+    public Page<Pet> getMyPets(Pageable pageable) {
+        User user = authenticatedUserService.get();
+        Page<Pet> pets = petRepository.findByOwner(user.getId(), pageable);
+
+        if(pets.isEmpty()) {
+            throw new ResourceNotFoundException("You currently have no pets, please add at least one pet to your account");
+        }
+
+        return pets;
+    }
+
+    public List<Pet> getPetsByUserId(Long userId) {
+        return petRepository.findByOwner(userId);
     }
 }

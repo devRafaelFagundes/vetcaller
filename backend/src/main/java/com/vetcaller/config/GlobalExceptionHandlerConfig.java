@@ -4,6 +4,7 @@ import com.vetcaller.exceptions.ApiException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -51,6 +52,12 @@ public class GlobalExceptionHandlerConfig {
         response.put("message", e.getMessage());
         response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.status(e.getStatus()).body(response);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String handleAccessDeniedException(AccessDeniedException e) {
+        return e.getMessage();
     }
 
 }

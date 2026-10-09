@@ -14,6 +14,5 @@ import lombok.Setter;
 public class GetPetResponse {
     private Long id;
     private String name;
-    private Integer age;
     private Long ownerId;
 }

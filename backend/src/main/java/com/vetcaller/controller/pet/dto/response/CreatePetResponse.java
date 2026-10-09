@@ -8,6 +8,5 @@ import lombok.*;
 public class CreatePetResponse {
     private Long id;
     private String name;
-    private int age;
     private Long ownerId;
 }

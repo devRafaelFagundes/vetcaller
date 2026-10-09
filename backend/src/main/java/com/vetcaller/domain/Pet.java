@@ -35,8 +35,6 @@ public class Pet {
     @Column(nullable = false, length = 100)
     private String name;
 
-    private Integer age;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
