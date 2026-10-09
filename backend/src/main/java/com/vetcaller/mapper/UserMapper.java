@@ -15,6 +15,7 @@ public class UserMapper {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setUserType(request.getUserType());
         return user;
     }
 
@@ -24,6 +25,7 @@ public class UserMapper {
                 .name(user.getName())
                 .email(user.getEmail())
                 .permissions(buildPermissionsResponse(user.getPermissions()))
+                .userType(user.getUserType())
                 .build();
     }
 

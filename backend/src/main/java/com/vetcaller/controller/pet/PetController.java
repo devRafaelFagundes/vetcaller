@@ -23,7 +23,7 @@ public class PetController {
 
     private final PetService petService;
 
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_VET')")
     @GetMapping
     public Page<GetPetResponse> getPets(Pageable pageable) {
         return petService.getPets(pageable).map(pet -> PetMapper.toGetPetResponse(pet));

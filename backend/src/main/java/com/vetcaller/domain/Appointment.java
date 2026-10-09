@@ -15,6 +15,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,8 +30,11 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "timestamp_start", nullable = false)
+    private Timestamp dateStart;
+
+    @Column(name = "timestamp_end", nullable = false)
+    private Timestamp dateEnd;
 
     @Column(nullable = false, length = 20)
     private String status;

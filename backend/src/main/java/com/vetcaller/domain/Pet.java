@@ -43,6 +43,4 @@ public class Pet {
     @OneToMany(mappedBy = "pet")
     private List<Appointment> appointments = new ArrayList<>();
 
-    public Pet(String name, int age, Long aLong) {
-    }
 }

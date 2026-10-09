@@ -1,6 +1,6 @@
 package com.vetcaller.domain.enums;
 
-public enum Permissions {
-    USER,
+public enum UserType {
+    CLIENT,
     VET
 }
