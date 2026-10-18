@@ -10,7 +10,6 @@ public class PetMapper {
         return CreatePetResponse.builder()
                 .id(createdPet.getId())
                 .name(createdPet.getName())
-                .age(createdPet.getAge())
                 .ownerId(createdPet.getOwner().getId())
                 .build();
     }
@@ -19,7 +18,6 @@ public class PetMapper {
         return GetPetResponse.builder()
                 .id(pet.getId())
                 .name(pet.getName())
-                .age(pet.getAge())
                 .ownerId(pet.getOwner().getId())
                 .build();
     }

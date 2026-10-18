@@ -1,14 +1,6 @@
 package com.vetcaller.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,11 +22,12 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "timestamp_start", nullable = false)
+    @Column(name = "date_start", nullable = false)
     private Timestamp dateStart;
 
-    @Column(name = "timestamp_end", nullable = false)
+    @Column(name = "date_end", nullable = false)
     private Timestamp dateEnd;
+
 
     @Column(nullable = false, length = 20)
     private String status;
@@ -46,4 +39,14 @@ public class Appointment {
     @JoinColumn(name = "pet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Pet pet;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "vet_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User vet;
+
+    @OneToOne(fetch =  FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private User owner;
 }

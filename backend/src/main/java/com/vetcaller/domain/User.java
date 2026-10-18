@@ -36,7 +36,7 @@ public class User {
     private Boolean active;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "user_type", nullable = false, length = 255)
     private UserType userType;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
