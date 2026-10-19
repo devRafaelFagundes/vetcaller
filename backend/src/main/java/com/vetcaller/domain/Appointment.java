@@ -1,5 +1,6 @@
 package com.vetcaller.domain;
 
+import com.vetcaller.domain.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "appointments")
@@ -30,7 +30,8 @@ public class Appointment {
 
 
     @Column(nullable = false, length = 20)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
     @Column(columnDefinition = "TEXT")
     private String reason;
