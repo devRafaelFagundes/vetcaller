@@ -5,6 +5,7 @@ import com.vetcaller.controller.appointment.dto.response.GenericAppointmentRespo
 import com.vetcaller.domain.Appointment;
 import com.vetcaller.domain.User;
 import com.vetcaller.domain.enums.AppointmentStatus;
+import com.vetcaller.exceptions.ConflitException;
 import com.vetcaller.exceptions.ResourceAlreadyInUseException;
 import com.vetcaller.exceptions.ResourceNotFoundException;
 import com.vetcaller.mapper.AppointmentMapper;
@@ -35,6 +36,19 @@ public class AppointmentService {
             throw new ResourceNotFoundException("No appointments found");
         }
         return appointments.map(AppointmentMapper::toGenericAppointmentResponse);
+    }
+
+    @Transactional
+    public void cancelAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
+
+        if (appointment.getStatus() != AppointmentStatus.PENDING) {
+            throw new ConflitException("Only pending appointments can be cancelled");
+        }
+
+        appointment.setStatus(AppointmentStatus.CANCELLED);
+        appointmentRepository.save(appointment);
     }
 
     @Transactional
