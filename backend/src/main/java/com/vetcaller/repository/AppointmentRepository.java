@@ -1,6 +1,7 @@
 package com.vetcaller.repository;
 
 import com.vetcaller.domain.Appointment;
+import com.vetcaller.domain.enums.AppointmentStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,19 +10,6 @@ import org.springframework.data.jpa.repository.NativeQuery;
 import java.sql.Timestamp;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    @NativeQuery("""
-        SELECT * FROM appointments a
-        WHERE a.vet_id = :userId AND a.start_time >= :afterTimestamp
-        ORDER BY a.start_time
-    """)
-    Page<Appointment> findByVetIdAndStartTimeAfter(Long userId, Timestamp afterTimestamp, Pageable pageable);
-
-    @NativeQuery("""
-        SELECT * FROM appointments a
-        WHERE a.vet_id = :userId
-        ORDER BY a.start_time
-    """)
-    Page<Appointment> findByVetId(Long userId, Pageable pageable);
 
     @NativeQuery("""
         SELECT 1 FROM appoinments p
@@ -34,4 +22,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
                     (p.date_end > :startTime AND p.date_end <= :endTime))
     """)
     boolean isAppointmentTimeSlotAvailable(Long vetId, Timestamp startTime, Timestamp endTime);
+
+    @NativeQuery("""
+        SELECT * FROM appointments a
+        WHERE a.vet_id = :userId AND a.start_time >= :afterTimestamp
+            AND a.status = :status
+        ORDER BY a.start_time
+    """)
+    Page<Appointment> findByVetIdAndStartTimeAfterAndStatus(Long userId, Timestamp afterTimestamp, AppointmentStatus status, Pageable pageable);
+
+    @NativeQuery("""
+        SELECT * FROM appointments a
+        WHERE a.vet_id = :userId AND a.status = :status
+        ORDER BY a.start_time
+    """)
+    Page<Appointment> findByVetIdAndStatus(Long userId, AppointmentStatus status, Pageable pageable);
 }

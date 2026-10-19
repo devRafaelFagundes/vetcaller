@@ -2,6 +2,7 @@ package com.vetcaller.controller.appointment;
 
 import com.vetcaller.controller.appointment.dto.request.CreateAppointmentRequest;
 import com.vetcaller.controller.appointment.dto.response.GenericAppointmentResponse;
+import com.vetcaller.domain.enums.AppointmentStatus;
 import com.vetcaller.service.appointment.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,9 @@ public class AppointmentController {
     public Page<GenericAppointmentResponse> getAppointments(
             @PathVariable Long userId,
             @RequestParam(required = false) Timestamp afterTimestamp,
+            @RequestParam(required = false, defaultValue = "PENDING") AppointmentStatus status,
             Pageable pageable) {
-        return appointmentService.getAppointmentsByUserId(userId, afterTimestamp, pageable);
+        return appointmentService.getAppointmentsByUserId(userId, afterTimestamp, status, pageable);
     }
 
     @PostMapping

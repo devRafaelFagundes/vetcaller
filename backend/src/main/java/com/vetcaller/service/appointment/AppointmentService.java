@@ -77,15 +77,15 @@ public class AppointmentService {
         return AppointmentMapper.toGenericAppointmentResponse(savedAppointment);
     }
 
-    public Page<GenericAppointmentResponse> getAppointmentsByUserId(Long userId, Timestamp afterTimestamp, Pageable pageable) {
+    public Page<GenericAppointmentResponse> getAppointmentsByUserId(Long userId, Timestamp afterTimestamp, AppointmentStatus status, Pageable pageable) {
 
         userValidator.validateUserById(userId);
 
         Page<Appointment> appointments;
         if (afterTimestamp != null) {
-            appointments = appointmentRepository.findByVetIdAndStartTimeAfter(userId, afterTimestamp, pageable);
+            appointments = appointmentRepository.findByVetIdAndStartTimeAfterAndStatus(userId, afterTimestamp, status, pageable);
         } else {
-            appointments = appointmentRepository.findByVetId(userId, pageable);
+            appointments = appointmentRepository.findByVetIdAndStatus(userId, status, pageable);
         }
 
         if(appointments.isEmpty()) {
