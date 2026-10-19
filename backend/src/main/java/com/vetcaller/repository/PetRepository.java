@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.NativeQuery;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
     Page<Pet> findAll(Pageable pageable);
@@ -19,4 +20,5 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     List<Pet> findByOwner(Long id);
 
+    boolean existsByNameAndOwner_Id(String name, Long ownerId);
 }

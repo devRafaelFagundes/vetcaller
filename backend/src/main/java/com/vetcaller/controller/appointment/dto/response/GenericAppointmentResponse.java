@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.sql.Timestamp;
 
 @Builder
-public record GetAppointmentResponse (
+public record GenericAppointmentResponse(
         Long id,
         Timestamp date_start,
         Timestamp date_end,

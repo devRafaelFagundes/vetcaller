@@ -1,14 +1,15 @@
 package com.vetcaller.controller.appointment;
 
-import com.vetcaller.controller.appointment.dto.response.GetAppointmentResponse;
-import com.vetcaller.service.AppointmentService;
+import com.vetcaller.controller.appointment.dto.request.CreateAppointmentRequest;
+import com.vetcaller.controller.appointment.dto.response.GenericAppointmentResponse;
+import com.vetcaller.service.appointment.AppointmentService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("appointments")
@@ -18,8 +19,21 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @GetMapping
-    public Page<GetAppointmentResponse> getAppointments(Pageable pageable) {
+    public Page<GenericAppointmentResponse> getAppointments(Pageable pageable) {
         return appointmentService.getAppointments(pageable);
+    }
+
+    @GetMapping("/vet/{userId}")
+    public Page<GenericAppointmentResponse> getAppointments(
+            @PathVariable Long userId,
+            @RequestParam(required = false) Timestamp afterTimestamp,
+            Pageable pageable) {
+        return appointmentService.getAppointmentsByUserId(userId, afterTimestamp, pageable);
+    }
+
+    @PostMapping
+    public GenericAppointmentResponse createAppointment(@Valid @RequestBody CreateAppointmentRequest request) {
+        return appointmentService.createAppointment(request);
     }
 
 }

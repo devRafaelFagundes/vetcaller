@@ -9,6 +9,7 @@ import com.vetcaller.exceptions.ResourceNotFoundException;
 import com.vetcaller.repository.PetRepository;
 import com.vetcaller.repository.UserRepository;
 import com.vetcaller.service.user.AuthenticatedUserService;
+import com.vetcaller.validation.PetValidator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class PetService {
     private final PetRepository petRepository;
     private final UserRepository userRepository;
     private final AuthenticatedUserService authenticatedUserService;
+    private final PetValidator petValidator;
 
     public Page<Pet> getPets(Pageable pageable) {
         Page<Pet> pets = petRepository.findAll(pageable);
@@ -42,11 +44,7 @@ public class PetService {
             throw new ResourceNotFoundException("Owner not found");
         }
 
-        if(
-                owner.get().getPets().stream()
-                        .map(Pet::getName).anyMatch(
-                                name -> name.equals(request.name())))
-        {
+        if(!petValidator.isPetNameUniqueForOwner(request.name(), request.ownerId())) {
             throw new ResourceAlreadyInUseException("A pet with the same name already exists for this owner");
         }
 
